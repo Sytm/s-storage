@@ -1,171 +1,46 @@
 package de.md5lukas.storage;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@SuppressWarnings({"unused", "UnusedReturnValue"})
-public abstract class StorageContainer {
-
-	protected String pathPrefix = "";
+public interface StorageContainer {
 
 	/**
 	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
+	 * The following types can be set:
+	 * <ul>
+	 * <li>{@link String}</li>
+	 * <li>{@link Byte}</li>
+	 * <li>{@link Short}</li>
+	 * <li>{@link Integer}</li>
+	 * <li>{@link Long}</li>
+	 * <li>{@link Float}</li>
+	 * <li>{@link Double}</li>
+	 * <li>{@link List Lists}<br>
+	 * The following types can be used in lists:
+	 * <ul>
+	 * <li>{@link Byte}</li>
+	 * <li>{@link Short}</li>
+	 * <li>{@link Integer}</li>
+	 * <li>{@link Long}</li>
+	 * <li>{@link Float}</li>
+	 * <li>{@link Double}</li>
+	 * <li>{@link String}</li>
+	 * <li>Other objects will be converted to a string using {@link String#valueOf(Object)}</li>
+	 * </ul>
+	 * </li>
+	 * <li>Other objects will be converted to a string using {@link String#valueOf(Object)}</li>
+	 * </ul>
 	 *
 	 * @param path  The path where the value should be stored
 	 * @param value The new value
 	 * @return <code>true</code>if the value has been set successfully
 	 */
-	public boolean set(String path, boolean value) {
-		return set(path, value, false);
-	}
-
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(String path, byte value) {
-		return set(path, value, false);
-	}
-
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(String path, short value) {
-		return set(path, value, false);
-	}
-
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(String path, int value) {
-		return set(path, value, false);
-	}
-
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(String path, long value) {
-		return set(path, value, false);
-	}
-
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(String path, float value) {
-		return set(path, value, false);
-	}
-
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(String path, double value) {
-		return set(path, value, false);
-	}
-
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(String path, Object value) {
-		return set(path, value, false);
-	}
-
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(String path, boolean value, boolean override);
-
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(String path, byte value, boolean override);
-
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(String path, short value, boolean override);
-
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(String path, int value, boolean override);
-
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(String path, long value, boolean override);
-
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(String path, float value, boolean override);
-
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(String path, double value, boolean override);
+	boolean set(@NotNull String path, @Nullable Object value);
 
 	/**
 	 * Sets a new value at the specified path.
@@ -193,69 +68,69 @@ public abstract class StorageContainer {
 	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
 	 * @return <code>true</code>if the value has been set successfully
 	 */
-	public abstract boolean set(String path, Object value, boolean override);
+	boolean set(@NotNull String path, @Nullable Object value, boolean override);
 
-	public abstract Optional<String> getString(String path);
+	@NotNull Optional<String> getString(@NotNull String path);
 
-	public abstract String getString(String path, String def);
+	String getString(@NotNull String path, String def);
 
-	public abstract Optional<Boolean> getBoolean(String path);
+	@NotNull Optional<Boolean> getBoolean(@NotNull String path);
 
-	public abstract boolean getBoolean(String path, boolean def);
+	boolean getBoolean(@NotNull String path, boolean def);
 
-	public abstract Optional<Byte> getByte(String path);
+	@NotNull Optional<Byte> getByte(@NotNull String path);
 
-	public abstract byte getByte(String path, byte def);
+	byte getByte(@NotNull String path, byte def);
 
-	public abstract Optional<Short> getShort(String path);
+	@NotNull Optional<Short> getShort(@NotNull String path);
 
-	public abstract short getShort(String path, short def);
+	short getShort(@NotNull String path, short def);
 
-	public abstract Optional<Integer> getInt(String path);
+	@NotNull Optional<Integer> getInt(@NotNull String path);
 
-	public abstract int getInt(String path, int def);
+	int getInt(@NotNull String path, int def);
 
-	public abstract Optional<Long> getLong(String path);
+	@NotNull Optional<Long> getLong(@NotNull String path);
 
-	public abstract long getLong(String path, long def);
+	long getLong(@NotNull String path, long def);
 
-	public abstract Optional<Float> getFloat(String path);
+	@NotNull Optional<Float> getFloat(@NotNull String path);
 
-	public abstract float getFloat(String path, float def);
+	float getFloat(@NotNull String path, float def);
 
-	public abstract Optional<Double> getDouble(String path);
+	@NotNull Optional<Double> getDouble(@NotNull String path);
 
-	public abstract double getDouble(String path, double def);
+	double getDouble(@NotNull String path, double def);
 
-	public abstract Optional<List<Byte>> getByteList(String path);
+	@NotNull Optional<List<Byte>> getByteList(@NotNull String path);
 
-	public abstract List<Byte> getByteList(String path, List<Byte> def);
+	List<Byte> getByteList(@NotNull String path, List<Byte> def);
 
-	public abstract Optional<List<Short>> getShortList(String path);
+	@NotNull Optional<List<Short>> getShortList(@NotNull String path);
 
-	public abstract List<Short> getShortList(String path, List<Short> def);
+	List<Short> getShortList(@NotNull String path, List<Short> def);
 
-	public abstract Optional<List<Integer>> getIntList(String path);
+	@NotNull Optional<List<Integer>> getIntList(@NotNull String path);
 
-	public abstract List<Integer> getIntList(String path, List<Integer> def);
+	List<Integer> getIntList(@NotNull String path, List<Integer> def);
 
-	public abstract Optional<List<Long>> getLongList(String path);
+	@NotNull Optional<List<Long>> getLongList(@NotNull String path);
 
-	public abstract List<Long> getLongList(String path, List<Long> def);
+	List<Long> getLongList(@NotNull String path, List<Long> def);
 
-	public abstract Optional<List<Float>> getFloatList(String path);
+	@NotNull Optional<List<Float>> getFloatList(@NotNull String path);
 
-	public abstract List<Float> getFloatList(String path, List<Float> def);
+	List<Float> getFloatList(@NotNull String path, List<Float> def);
 
-	public abstract Optional<List<Double>> getDoubleList(String path);
+	@NotNull Optional<List<Double>> getDoubleList(@NotNull String path);
 
-	public abstract List<Double> getDoubleList(String path, List<Double> def);
+	List<Double> getDoubleList(@NotNull String path, List<Double> def);
 
-	public abstract Optional<List<String>> getStringList(String path);
+	@NotNull Optional<List<String>> getStringList(@NotNull String path);
 
-	public abstract List<String> getStringList(String path, List<String> def);
+	List<String> getStringList(@NotNull String path, List<String> def);
 
-	public abstract Set<String> getKeys(String path);
+	@Nullable Set<String> getKeys(@NotNull String path);
 
 	/**
 	 * Checks if a value at the given path is set
@@ -263,31 +138,25 @@ public abstract class StorageContainer {
 	 * @param path The path to the value
 	 * @return <code>true</code> if a value is existing at the given path, <code>false</code> otherwise
 	 */
-	public abstract boolean contains(String path);
+	boolean contains(@NotNull String path);
 
 	/**
 	 * Sets a new prefix that will be used by every set and get call in this instance
 	 *
 	 * @param prefix The new prefix
 	 */
-	public void setPathPrefix(String prefix) {
-		pathPrefix = prefix;
-	}
+	void setPathPrefix(@NotNull String prefix);
 
 	/**
 	 * Resets the prefix<br>
 	 * Does the same as {@link #setPathPrefix(String) setPathPrefix("")}
 	 */
-	public void resetPathPrefix() {
-		pathPrefix = "";
-	}
+	void resetPathPrefix();
 
 	/**
 	 * Retrieves the current path-prefix used by this instance
 	 *
 	 * @return The current prefix
 	 */
-	public String getPathPrefix() {
-		return pathPrefix;
-	}
+	String getPathPrefix();
 }

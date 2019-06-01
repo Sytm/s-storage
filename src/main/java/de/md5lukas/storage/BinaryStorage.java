@@ -4,6 +4,7 @@ import de.md5lukas.nbt.NbtIo;
 import de.md5lukas.nbt.Tag;
 import de.md5lukas.nbt.tags.*;
 import de.md5lukas.storage.util.CompoundHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class BinaryStorage extends StorageContainer implements FileStorage {
+public class BinaryStorage extends AbstractStorageContainer implements FileStorage {
 
 	private String name;
 	private CompoundTag root;
@@ -28,49 +29,49 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public boolean set(String path, boolean value, boolean override) {
+	public boolean set(@NotNull String path, boolean value, boolean override) {
 		path = pathPrefix + path;
 		return CompoundHelper.setTag(root, new ByteTag(null, (byte) (value ? 1 : 0)), path, override);
 	}
 
 	@Override
-	public boolean set(String path, byte value, boolean override) {
+	public boolean set(@NotNull String path, byte value, boolean override) {
 		path = pathPrefix + path;
 		return CompoundHelper.setTag(root, new ByteTag(null, value), path, override);
 	}
 
 	@Override
-	public boolean set(String path, short value, boolean override) {
+	public boolean set(@NotNull String path, short value, boolean override) {
 		path = pathPrefix + path;
 		return CompoundHelper.setTag(root, new ShortTag(null, value), path, override);
 	}
 
 	@Override
-	public boolean set(String path, int value, boolean override) {
+	public boolean set(@NotNull String path, int value, boolean override) {
 		path = pathPrefix + path;
 		return CompoundHelper.setTag(root, new IntTag(null, value), path, override);
 	}
 
 	@Override
-	public boolean set(String path, long value, boolean override) {
+	public boolean set(@NotNull String path, long value, boolean override) {
 		path = pathPrefix + path;
 		return CompoundHelper.setTag(root, new LongTag(null, value), path, override);
 	}
 
 	@Override
-	public boolean set(String path, float value, boolean override) {
+	public boolean set(@NotNull String path, float value, boolean override) {
 		path = pathPrefix + path;
 		return CompoundHelper.setTag(root, new FloatTag(null, value), path, override);
 	}
 
 	@Override
-	public boolean set(String path, double value, boolean override) {
+	public boolean set(@NotNull String path, double value, boolean override) {
 		path = pathPrefix + path;
 		return CompoundHelper.setTag(root, new DoubleTag(null, value), path, override);
 	}
 
 	@Override
-	public boolean set(String path, Object value, boolean override) {
+	public boolean set(@NotNull String path, Object value, boolean override) {
 		if (value == null) {
 			return CompoundHelper.setTag(root, null, path, true);
 		} else if (value instanceof List<?>) {
@@ -108,8 +109,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return CompoundHelper.setTag(root, new StringTag(null, String.valueOf(value)), path, override);
 	}
 
+	@NotNull
 	@Override
-	public Optional<String> getString(String path) {
+	public Optional<String> getString(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof StringTag) {
@@ -119,7 +121,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public String getString(String path, String def) {
+	public String getString(@NotNull String path, String def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof StringTag) {
@@ -128,8 +130,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<Boolean> getBoolean(String path) {
+	public Optional<Boolean> getBoolean(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ByteTag) {
@@ -139,7 +142,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public boolean getBoolean(String path, boolean def) {
+	public boolean getBoolean(@NotNull String path, boolean def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ByteTag) {
@@ -148,8 +151,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<Byte> getByte(String path) {
+	public Optional<Byte> getByte(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ByteTag) {
@@ -159,7 +163,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public byte getByte(String path, byte def) {
+	public byte getByte(@NotNull String path, byte def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ByteTag) {
@@ -168,8 +172,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<Short> getShort(String path) {
+	public Optional<Short> getShort(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ShortTag) {
@@ -179,7 +184,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public short getShort(String path, short def) {
+	public short getShort(@NotNull String path, short def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ShortTag) {
@@ -188,8 +193,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<Integer> getInt(String path) {
+	public Optional<Integer> getInt(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof IntTag) {
@@ -199,7 +205,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public int getInt(String path, int def) {
+	public int getInt(@NotNull String path, int def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof IntTag) {
@@ -208,8 +214,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<Long> getLong(String path) {
+	public Optional<Long> getLong(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof LongTag) {
@@ -219,7 +226,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public long getLong(String path, long def) {
+	public long getLong(@NotNull String path, long def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof LongTag) {
@@ -228,8 +235,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<Float> getFloat(String path) {
+	public Optional<Float> getFloat(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof FloatTag) {
@@ -239,7 +247,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public float getFloat(String path, float def) {
+	public float getFloat(@NotNull String path, float def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof FloatTag) {
@@ -248,8 +256,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<Double> getDouble(String path) {
+	public Optional<Double> getDouble(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof DoubleTag) {
@@ -259,7 +268,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public double getDouble(String path, double def) {
+	public double getDouble(@NotNull String path, double def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof DoubleTag) {
@@ -268,8 +277,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return 0;
 	}
 
+	@NotNull
 	@Override
-	public Optional<List<Byte>> getByteList(String path) {
+	public Optional<List<Byte>> getByteList(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -286,7 +296,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public List<Byte> getByteList(String path, List<Byte> def) {
+	public List<Byte> getByteList(@NotNull String path, List<Byte> def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -302,8 +312,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<List<Short>> getShortList(String path) {
+	public Optional<List<Short>> getShortList(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -320,7 +331,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public List<Short> getShortList(String path, List<Short> def) {
+	public List<Short> getShortList(@NotNull String path, List<Short> def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -336,8 +347,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<List<Integer>> getIntList(String path) {
+	public Optional<List<Integer>> getIntList(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -354,7 +366,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public List<Integer> getIntList(String path, List<Integer> def) {
+	public List<Integer> getIntList(@NotNull String path, List<Integer> def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -370,8 +382,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<List<Long>> getLongList(String path) {
+	public Optional<List<Long>> getLongList(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -388,7 +401,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public List<Long> getLongList(String path, List<Long> def) {
+	public List<Long> getLongList(@NotNull String path, List<Long> def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -404,8 +417,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<List<Float>> getFloatList(String path) {
+	public Optional<List<Float>> getFloatList(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -422,7 +436,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public List<Float> getFloatList(String path, List<Float> def) {
+	public List<Float> getFloatList(@NotNull String path, List<Float> def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -438,8 +452,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 		return def;
 	}
 
+	@NotNull
 	@Override
-	public Optional<List<Double>> getDoubleList(String path) {
+	public Optional<List<Double>> getDoubleList(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -456,7 +471,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public List<Double> getDoubleList(String path, List<Double> def) {
+	public List<Double> getDoubleList(@NotNull String path, List<Double> def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -473,8 +488,9 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 
+	@NotNull
 	@Override
-	public Optional<List<String>> getStringList(String path) {
+	public Optional<List<String>> getStringList(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -491,7 +507,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public List<String> getStringList(String path, List<String> def) {
+	public List<String> getStringList(@NotNull String path, List<String> def) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof ListTag) {
@@ -508,7 +524,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public Set<String> getKeys(String path) {
+	public Set<String> getKeys(@NotNull String path) {
 		path = pathPrefix + path;
 		Tag tag = CompoundHelper.getTag(root, path);
 		if (tag instanceof CompoundTag) {
@@ -518,7 +534,7 @@ public class BinaryStorage extends StorageContainer implements FileStorage {
 	}
 
 	@Override
-	public boolean contains(String path) {
+	public boolean contains(@NotNull String path) {
 		path = pathPrefix + path;
 		return CompoundHelper.getTag(root, path) != null;
 	}
