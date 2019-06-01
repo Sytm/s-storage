@@ -1,4 +1,4 @@
-import de.md5lukas.storage.BinaryStorage;
+import de.md5lukas.storage.YamlStorage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,15 +11,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BinaryStorageTest {
+public class YamlStorageTest {
 
-	private BinaryStorage storage;
+	private YamlStorage storage;
 	private List<File> createdFiles;
 
 	@BeforeEach
 	void init() {
 		createdFiles = new ArrayList<>();
-		storage = new BinaryStorage("root");
+		storage = new YamlStorage();
 		storage.set("booleanT", true);
 		storage.set("booleanF", false);
 		storage.set("byte", (byte) 9);
@@ -94,31 +94,21 @@ public class BinaryStorageTest {
 		});
 	}
 
-	@Test
-	void saveAndLoadTest() throws IOException {
-		File file = new File("src/test/resources/test.nbt");
-		createdFiles.add(file);
-		String value = storage.toString();
-		storage.save(file);
-		storage.load(file);
-		assertEquals(value, storage.toString());
-	}
-
-	@Test
-	void saveAndLoadCompressedTest() throws IOException {
-		File file = new File("src/test/resources/test.nbt");
-		createdFiles.add(file);
-		String value = storage.getRoot().toString();
-		storage.save(file, true);
-		storage.load(file, true);
-		assertEquals(value, storage.getRoot().toString());
-	}
-
 	private <T> void compareLists(List<T> expected, List<T> actual) {
 		assertNotNull(actual);
 		assertEquals(expected.size(), actual.size());
 		for (int i = 0; i < expected.size(); ++i) {
 			assertEquals(expected.get(i), actual.get(i));
 		}
+	}
+
+	@Test
+	void saveAndLoadTest() throws IOException {
+		File file = new File("src/test/resources/test.yaml");
+		createdFiles.add(file);
+		String value = storage.toString();
+		storage.save(file);
+		storage.load(file);
+		assertEquals(value, storage.toString());
 	}
 }

@@ -42,8 +42,9 @@ public class CompoundHelper {
 				if (t == null || tag == null || t.getId() == tag.getId() || override) {
 					parent.put(name, tag);
 					return true;
+				} else {
+					return false;
 				}
-				return false;
 			} else {
 				if (parent.contains(name)) {
 					Tag child = parent.get(name);

@@ -1,331 +1,254 @@
 package de.md5lukas.storage;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.function.Function;
 
-@SuppressWarnings({"unused", "UnusedReturnValue"})
-public abstract class AbstractStorageContainer {
+public abstract class AbstractStorageContainer implements StorageContainer {
 
-	protected String pathPrefix = "";
+	private String pathPrefix = "";
 
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(@NotNull String path, boolean value) {
+	public boolean set(String path, Object value) {
 		return set(path, value, false);
 	}
 
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(@NotNull String path, byte value) {
-		return set(path, value, false);
+	public boolean set(String path, Object value, boolean override) {
+		path = checkPathAndPrependPrefix(path);
+		if (value == null) {
+			return setNull(path, override);
+		} else if (value instanceof List<?>) {
+			return setList(path, (List<?>) value, override);
+		} else if (value instanceof Boolean) {
+			return setBoolean(path, (boolean) value, override);
+		} else if (value instanceof Byte) {
+			return setByte(path, (byte) value, override);
+		} else if (value instanceof Short) {
+			return setShort(path, (short) value, override);
+		} else if (value instanceof Integer) {
+			return setInteger(path, (int) value, override);
+		} else if (value instanceof Long) {
+			return setLong(path, (long) value, override);
+		} else if (value instanceof Float) {
+			return setFloat(path, (float) value, override);
+		} else if (value instanceof Double) {
+			return setDouble(path, (double) value, override);
+		}
+		return setString(path, Objects.toString(value), override);
 	}
 
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(@NotNull String path, short value) {
-		return set(path, value, false);
+	protected boolean setString(String path, String value, boolean override) {
+		return false;
 	}
 
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(@NotNull String path, int value) {
-		return set(path, value, false);
+	protected boolean setBoolean(String path, boolean value, boolean override) {
+		return false;
 	}
 
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(@NotNull String path, long value) {
-		return set(path, value, false);
+	protected boolean setByte(String path, byte value, boolean override) {
+		return false;
 	}
 
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(@NotNull String path, float value) {
-		return set(path, value, false);
+	protected boolean setShort(String path, short value, boolean override) {
+		return false;
 	}
 
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(@NotNull String path, double value) {
-		return set(path, value, false);
+	protected boolean setInteger(String path, int value, boolean override) {
+		return false;
 	}
 
-	/**
-	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
-	 * The following types can be set:
-	 * <ul>
-	 * <li>{@link List Lists}<br>
-	 * The following types can be used in lists:
-	 * <ul>
-	 * <li>{@link Byte}</li>
-	 * <li>{@link Short}</li>
-	 * <li>{@link Integer}</li>
-	 * <li>{@link Long}</li>
-	 * <li>{@link Float}</li>
-	 * <li>{@link Double}</li>
-	 * <li>{@link String}</li>
-	 * <li>Other objects will be converted to a string using {@link String#valueOf(Object)}</li>
-	 * </ul>
-	 * </li>
-	 * <li>{@link String}</li>
-	 * <li>Other objects will be converted to a string using {@link String#valueOf(Object)}</li>
-	 * </ul>
-	 *
-	 * @param path  The path where the value should be stored
-	 * @param value The new value
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public boolean set(@NotNull String path, @Nullable Object value) {
-		return set(path, value, false);
+	protected boolean setLong(String path, long value, boolean override) {
+		return false;
 	}
 
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(@NotNull String path, boolean value, boolean override);
+	protected boolean setFloat(String path, float value, boolean override) {
+		return false;
+	}
 
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(@NotNull String path, byte value, boolean override);
+	protected boolean setDouble(String path, double value, boolean override) {
+		return false;
+	}
 
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(@NotNull String path, short value, boolean override);
+	protected boolean setList(String path, List<?> value, boolean override) {
+		return false;
+	}
 
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(@NotNull String path, int value, boolean override);
+	protected boolean setNull(String path, boolean override) {
+		return false;
+	}
 
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(@NotNull String path, long value, boolean override);
+	@Contract(pure = true)
+	protected final <T> List<T> convertList(List<?> input, Function<Object, T> converter) {
+		List<T> output = new ArrayList<>(input.size());
+		for (Object o : input)
+			output.add(converter.apply(o));
+		return output;
+	}
 
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(@NotNull String path, float value, boolean override);
+	@Contract(pure = true)
+	protected final <R, T> List<T> convertListTyped(List<R> input, Function<R, T> converter) {
+		List<T> output = new ArrayList<>(input.size());
+		for (R o : input)
+			output.add(converter.apply(o));
+		return output;
+	}
 
-	/**
-	 * Sets a new value at the specified path
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(@NotNull String path, double value, boolean override);
 
-	/**
-	 * Sets a new value at the specified path.
-	 * The following types can be set:
-	 * <ul>
-	 * <li>{@link List Lists}<br>
-	 * The following types can be used in lists:
-	 * <ul>
-	 * <li>{@link Byte}</li>
-	 * <li>{@link Short}</li>
-	 * <li>{@link Integer}</li>
-	 * <li>{@link Long}</li>
-	 * <li>{@link Float}</li>
-	 * <li>{@link Double}</li>
-	 * <li>{@link String}</li>
-	 * <li>Other objects will be converted to a string using {@link String#valueOf(Object)}</li>
-	 * </ul>
-	 * </li>
-	 * <li>{@link String}</li>
-	 * <li>Other objects will be converted to a string using {@link String#valueOf(Object)}</li>
-	 * </ul>
-	 *
-	 * @param path     The path where the value should be stored
-	 * @param value    The new value
-	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
-	 * @return <code>true</code>if the value has been set successfully
-	 */
-	public abstract boolean set(@NotNull String path, @Nullable Object value, boolean override);
+	public abstract Optional<String> getString(String path);
 
-	@NotNull
-	public abstract Optional<String> getString(@NotNull String path);
+	public String getString(String path, String def) {
+		Optional<String> optional = getString(path);
+		return optional.orElse(def);
+	}
 
-	public abstract String getString(@NotNull String path, String def);
 
-	@NotNull
-	public abstract Optional<Boolean> getBoolean(@NotNull String path);
+	public abstract Optional<Boolean> getBoolean(String path);
 
-	public abstract boolean getBoolean(@NotNull String path, boolean def);
+	public boolean getBoolean(String path, boolean def) {
+		Optional<Boolean> optional = getBoolean(path);
+		return optional.orElse(def);
+	}
 
-	@NotNull
-	public abstract Optional<Byte> getByte(@NotNull String path);
 
-	public abstract byte getByte(@NotNull String path, byte def);
+	public abstract Optional<Byte> getByte(String path);
 
-	@NotNull
-	public abstract Optional<Short> getShort(@NotNull String path);
+	public byte getByte(String path, byte def) {
+		Optional<Byte> optional = getByte(path);
+		return optional.orElse(def);
+	}
 
-	public abstract short getShort(@NotNull String path, short def);
 
-	@NotNull
-	public abstract Optional<Integer> getInt(@NotNull String path);
+	public abstract Optional<Short> getShort(String path);
 
-	public abstract int getInt(@NotNull String path, int def);
+	public short getShort(String path, short def) {
+		Optional<Short> optional = getShort(path);
+		return optional.orElse(def);
+	}
 
-	@NotNull
-	public abstract Optional<Long> getLong(@NotNull String path);
 
-	public abstract long getLong(@NotNull String path, long def);
+	public abstract Optional<Integer> getInt(String path);
 
-	@NotNull
-	public abstract Optional<Float> getFloat(@NotNull String path);
+	public int getInt(String path, int def) {
+		Optional<Integer> optional = getInt(path);
+		return optional.orElse(def);
+	}
 
-	public abstract float getFloat(@NotNull String path, float def);
 
-	@NotNull
-	public abstract Optional<Double> getDouble(@NotNull String path);
+	public abstract Optional<Long> getLong(String path);
 
-	public abstract double getDouble(@NotNull String path, double def);
+	public long getLong(String path, long def) {
+		Optional<Long> optional = getLong(path);
+		return optional.orElse(def);
+	}
 
-	@NotNull
-	public abstract Optional<List<Byte>> getByteList(@NotNull String path);
 
-	public abstract List<Byte> getByteList(@NotNull String path, List<Byte> def);
+	public abstract Optional<Float> getFloat(String path);
 
-	@NotNull
-	public abstract Optional<List<Short>> getShortList(@NotNull String path);
+	public float getFloat(String path, float def) {
+		Optional<Float> optional = getFloat(path);
+		return optional.orElse(def);
+	}
 
-	public abstract List<Short> getShortList(@NotNull String path, List<Short> def);
 
-	@NotNull
-	public abstract Optional<List<Integer>> getIntList(@NotNull String path);
+	public abstract Optional<Double> getDouble(String path);
 
-	public abstract List<Integer> getIntList(@NotNull String path, List<Integer> def);
+	public double getDouble(String path, double def) {
+		Optional<Double> optional = getDouble(path);
+		return optional.orElse(def);
+	}
 
-	@NotNull
-	public abstract Optional<List<Long>> getLongList(@NotNull String path);
 
-	public abstract List<Long> getLongList(@NotNull String path, List<Long> def);
+	public abstract Optional<List<Byte>> getByteList(String path);
 
-	@NotNull
-	public abstract Optional<List<Float>> getFloatList(@NotNull String path);
+	public List<Byte> getByteList(String path, List<Byte> def) {
+		Optional<List<Byte>> optional = getByteList(path);
+		return optional.orElse(def);
+	}
 
-	public abstract List<Float> getFloatList(@NotNull String path, List<Float> def);
 
-	@NotNull
-	public abstract Optional<List<Double>> getDoubleList(@NotNull String path);
+	public abstract Optional<List<Short>> getShortList(String path);
 
-	public abstract List<Double> getDoubleList(@NotNull String path, List<Double> def);
+	public List<Short> getShortList(String path, List<Short> def) {
+		Optional<List<Short>> optional = getShortList(path);
+		return optional.orElse(def);
+	}
 
-	@NotNull
-	public abstract Optional<List<String>> getStringList(@NotNull String path);
 
-	public abstract List<String> getStringList(@NotNull String path, List<String> def);
+	public abstract Optional<List<Integer>> getIntList(String path);
 
-	@Nullable
-	public abstract Set<String> getKeys(@NotNull String path);
+	public List<Integer> getIntList(String path, List<Integer> def) {
+		Optional<List<Integer>> optional = getIntList(path);
+		return optional.orElse(def);
+	}
 
-	/**
-	 * Checks if a value at the given path is set
-	 *
-	 * @param path The path to the value
-	 * @return <code>true</code> if a value is existing at the given path, <code>false</code> otherwise
-	 */
-	public abstract boolean contains(@NotNull String path);
 
-	/**
-	 * Sets a new prefix that will be used by every set and get call in this instance
-	 *
-	 * @param prefix The new prefix
-	 */
-	public void setPathPrefix(@NotNull String prefix) {
+	public abstract Optional<List<Long>> getLongList(String path);
+
+	public List<Long> getLongList(String path, List<Long> def) {
+		Optional<List<Long>> optional = getLongList(path);
+		return optional.orElse(def);
+	}
+
+
+	public abstract Optional<List<Float>> getFloatList(String path);
+
+	public List<Float> getFloatList(String path, List<Float> def) {
+		Optional<List<Float>> optional = getFloatList(path);
+		return optional.orElse(def);
+	}
+
+
+	public abstract Optional<List<Double>> getDoubleList(String path);
+
+	public List<Double> getDoubleList(String path, List<Double> def) {
+		Optional<List<Double>> optional = getDoubleList(path);
+		return optional.orElse(def);
+	}
+
+
+	public abstract Optional<List<String>> getStringList(String path);
+
+	public List<String> getStringList(String path, List<String> def) {
+		Optional<List<String>> optional = getStringList(path);
+		return optional.orElse(def);
+	}
+
+
+	public abstract Set<String> getKeys(String path);
+
+	public abstract boolean contains(String path);
+
+	public void setPathPrefix(String prefix) {
+		if (prefix == null)
+			throw new IllegalArgumentException("The new prefix cannot be null!");
 		pathPrefix = prefix;
 	}
 
-	/**
-	 * Resets the prefix<br>
-	 * Does the same as {@link #setPathPrefix(String) setPathPrefix("")}
-	 */
 	public void resetPathPrefix() {
 		pathPrefix = "";
 	}
 
-	/**
-	 * Retrieves the current path-prefix used by this instance
-	 *
-	 * @return The current prefix
-	 */
 	public String getPathPrefix() {
 		return pathPrefix;
+	}
+
+	// Prepends the path prefix to the given path and checks for null path
+	@Contract("null -> fail")
+	protected String checkPathAndPrependPrefix(String path) {
+		if (path == null)
+			throw new IllegalArgumentException("The path cannot be null!");
+		return pathPrefix + path;
+	}
+
+	@Override
+	public void save(File file) throws IOException {
+		save(file, false);
+	}
+
+	@Override
+	public void load(File file) throws IOException {
+		load(file, false);
 	}
 }

@@ -1,13 +1,10 @@
 package de.md5lukas.storage;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public interface StorageContainer {
+public interface StorageContainer extends FileStorage {
 
 	/**
 	 * Sets a new value at the specified path. This will not override the existing value if it is of a different type
@@ -40,7 +37,7 @@ public interface StorageContainer {
 	 * @param value The new value
 	 * @return <code>true</code>if the value has been set successfully
 	 */
-	boolean set(@NotNull String path, @Nullable Object value);
+	boolean set(String path, Object value);
 
 	/**
 	 * Sets a new value at the specified path.
@@ -68,69 +65,100 @@ public interface StorageContainer {
 	 * @param override If <code>true</code>, the previous value, if present, will be overridden, in disregard of the type
 	 * @return <code>true</code>if the value has been set successfully
 	 */
-	boolean set(@NotNull String path, @Nullable Object value, boolean override);
+	boolean set(String path, Object value, boolean override);
 
-	@NotNull Optional<String> getString(@NotNull String path);
 
-	String getString(@NotNull String path, String def);
+	Optional<String> getString(String path);
 
-	@NotNull Optional<Boolean> getBoolean(@NotNull String path);
 
-	boolean getBoolean(@NotNull String path, boolean def);
+	String getString(String path, String def);
 
-	@NotNull Optional<Byte> getByte(@NotNull String path);
 
-	byte getByte(@NotNull String path, byte def);
+	Optional<Boolean> getBoolean(String path);
 
-	@NotNull Optional<Short> getShort(@NotNull String path);
 
-	short getShort(@NotNull String path, short def);
+	boolean getBoolean(String path, boolean def);
 
-	@NotNull Optional<Integer> getInt(@NotNull String path);
 
-	int getInt(@NotNull String path, int def);
+	Optional<Byte> getByte(String path);
 
-	@NotNull Optional<Long> getLong(@NotNull String path);
 
-	long getLong(@NotNull String path, long def);
+	byte getByte(String path, byte def);
 
-	@NotNull Optional<Float> getFloat(@NotNull String path);
 
-	float getFloat(@NotNull String path, float def);
+	Optional<Short> getShort(String path);
 
-	@NotNull Optional<Double> getDouble(@NotNull String path);
 
-	double getDouble(@NotNull String path, double def);
+	short getShort(String path, short def);
 
-	@NotNull Optional<List<Byte>> getByteList(@NotNull String path);
 
-	List<Byte> getByteList(@NotNull String path, List<Byte> def);
+	Optional<Integer> getInt(String path);
 
-	@NotNull Optional<List<Short>> getShortList(@NotNull String path);
 
-	List<Short> getShortList(@NotNull String path, List<Short> def);
+	int getInt(String path, int def);
 
-	@NotNull Optional<List<Integer>> getIntList(@NotNull String path);
 
-	List<Integer> getIntList(@NotNull String path, List<Integer> def);
+	Optional<Long> getLong(String path);
 
-	@NotNull Optional<List<Long>> getLongList(@NotNull String path);
 
-	List<Long> getLongList(@NotNull String path, List<Long> def);
+	long getLong(String path, long def);
 
-	@NotNull Optional<List<Float>> getFloatList(@NotNull String path);
 
-	List<Float> getFloatList(@NotNull String path, List<Float> def);
+	Optional<Float> getFloat(String path);
 
-	@NotNull Optional<List<Double>> getDoubleList(@NotNull String path);
 
-	List<Double> getDoubleList(@NotNull String path, List<Double> def);
+	float getFloat(String path, float def);
 
-	@NotNull Optional<List<String>> getStringList(@NotNull String path);
 
-	List<String> getStringList(@NotNull String path, List<String> def);
+	Optional<Double> getDouble(String path);
 
-	@Nullable Set<String> getKeys(@NotNull String path);
+
+	double getDouble(String path, double def);
+
+
+	Optional<List<Byte>> getByteList(String path);
+
+
+	List<Byte> getByteList(String path, List<Byte> def);
+
+
+	Optional<List<Short>> getShortList(String path);
+
+
+	List<Short> getShortList(String path, List<Short> def);
+
+
+	Optional<List<Integer>> getIntList(String path);
+
+
+	List<Integer> getIntList(String path, List<Integer> def);
+
+
+	Optional<List<Long>> getLongList(String path);
+
+
+	List<Long> getLongList(String path, List<Long> def);
+
+
+	Optional<List<Float>> getFloatList(String path);
+
+
+	List<Float> getFloatList(String path, List<Float> def);
+
+
+	Optional<List<Double>> getDoubleList(String path);
+
+
+	List<Double> getDoubleList(String path, List<Double> def);
+
+
+	Optional<List<String>> getStringList(String path);
+
+
+	List<String> getStringList(String path, List<String> def);
+
+
+	Set<String> getKeys(String path);
 
 	/**
 	 * Checks if a value at the given path is set
@@ -138,14 +166,14 @@ public interface StorageContainer {
 	 * @param path The path to the value
 	 * @return <code>true</code> if a value is existing at the given path, <code>false</code> otherwise
 	 */
-	boolean contains(@NotNull String path);
+	boolean contains(String path);
 
 	/**
 	 * Sets a new prefix that will be used by every set and get call in this instance
 	 *
 	 * @param prefix The new prefix
 	 */
-	void setPathPrefix(@NotNull String prefix);
+	void setPathPrefix(String prefix);
 
 	/**
 	 * Resets the prefix<br>
