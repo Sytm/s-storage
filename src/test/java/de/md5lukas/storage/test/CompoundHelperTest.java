@@ -1,9 +1,10 @@
+package de.md5lukas.storage.test;
+
 import de.md5lukas.nbt.exceptions.NBTTagTypeMismatchException;
 import de.md5lukas.nbt.tags.*;
 import de.md5lukas.storage.util.CompoundHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 

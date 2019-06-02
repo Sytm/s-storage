@@ -3,8 +3,10 @@ package de.md5lukas.storage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * This interface defines that a storage container can be loaded from and save to a disk
+ */
 public interface FileStorage {
-
 
 	/**
 	 * Loads the data from the specified file and treats it as uncompressed

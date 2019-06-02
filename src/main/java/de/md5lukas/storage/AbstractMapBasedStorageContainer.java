@@ -2,92 +2,78 @@ package de.md5lukas.storage;
 
 import de.md5lukas.storage.util.MapHelper;
 
+import java.io.File;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public abstract class MapBasedStorageContainer extends AbstractStorageContainer {
+/**
+ * This is a almost complete implementation of {@link StorageContainer} for file formats which allow you to save and load
+ * Maps with strings as keys. The only missing methods are {@link StorageContainer#load(File, boolean)} and
+ * {@link StorageContainer#save(File, boolean)}
+ *
+ * @author Md5Lukas
+ */
+public abstract class AbstractMapBasedStorageContainer extends AbstractStorageContainer {
 
-	protected Map<String, Object> root;
+	protected Map<String, Object> map;
 
-	public MapBasedStorageContainer() {
-		root = new HashMap<>();
+	public AbstractMapBasedStorageContainer() {
+		map = new HashMap<>();
 	}
 
 	@Override
 	public boolean set(String path, Object value, boolean override) {
-		return MapHelper.set(root, path, value, override);
+		if (value == null)
+			override = true;
+		return MapHelper.set(map, path, value, override);
 	}
 
 	@Override
 	public Optional<String> getString(String path) {
-		path = checkPathAndPrependPrefix(path);
-		Object value = MapHelper.get(root, path);
-		if (value instanceof String)
-			return Optional.of((String) value);
-		return Optional.empty();
+		return get(path, o -> o instanceof String, String::valueOf);
 	}
 
 	@Override
 	public Optional<Boolean> getBoolean(String path) {
-		path = checkPathAndPrependPrefix(path);
-		Object value = MapHelper.get(root, path);
-		if (value instanceof Boolean)
-			return Optional.of((Boolean) value);
-		return Optional.empty();
+		return get(path, o -> o instanceof Boolean, o -> (Boolean) o);
 	}
 
 	@Override
 	public Optional<Byte> getByte(String path) {
-		path = checkPathAndPrependPrefix(path);
-		Object value = MapHelper.get(root, path);
-		if (value instanceof Byte)
-			return Optional.of((Byte) value);
-		return Optional.empty();
+		return get(path, o -> o instanceof Byte, o -> (Byte) o);
 	}
 
 	@Override
 	public Optional<Short> getShort(String path) {
-		path = checkPathAndPrependPrefix(path);
-		Object value = MapHelper.get(root, path);
-		if (value instanceof Short)
-			return Optional.of((Short) value);
-		return Optional.empty();
+		return get(path, o -> o instanceof Short, o -> (Short) o);
 	}
 
 	@Override
 	public Optional<Integer> getInt(String path) {
-		path = checkPathAndPrependPrefix(path);
-		Object value = MapHelper.get(root, path);
-		if (value instanceof Integer)
-			return Optional.of((Integer) value);
-		return Optional.empty();
+		return get(path, o -> o instanceof Integer, o -> (Integer) o);
 	}
 
 	@Override
 	public Optional<Long> getLong(String path) {
-		path = checkPathAndPrependPrefix(path);
-		Object value = MapHelper.get(root, path);
-		if (value instanceof Long)
-			return Optional.of((Long) value);
-		return Optional.empty();
+		return get(path, o -> o instanceof Long, o -> (Long) o);
 	}
 
 	@Override
 	public Optional<Float> getFloat(String path) {
-		path = checkPathAndPrependPrefix(path);
-		Object value = MapHelper.get(root, path);
-		if (value instanceof Float)
-			return Optional.of((Float) value);
-		return Optional.empty();
+		return get(path, o -> o instanceof Float, o -> (Float) o);
 	}
 
 	@Override
 	public Optional<Double> getDouble(String path) {
+		return get(path, o -> o instanceof Double, o -> (Double) o);
+	}
+
+	protected <T> Optional<T> get(String path, Function<Object, Boolean> checkType, Function<Object, T> caster) {
 		path = checkPathAndPrependPrefix(path);
-		Object value = MapHelper.get(root, path);
-		if (value instanceof Double)
-			return Optional.of((Double) value);
+		Object value = MapHelper.get(map, path);
+		if (checkType.apply(value))
+			return Optional.of(caster.apply(value));
 		return Optional.empty();
 	}
 
@@ -126,9 +112,18 @@ public abstract class MapBasedStorageContainer extends AbstractStorageContainer 
 		return getList(path, o -> o instanceof String, Objects::toString);
 	}
 
+	/**
+	 * Helper method to drastically reduce the amount of code in the getList methods
+	 *
+	 * @param path      The path where the list can be found
+	 * @param checkType A function to check if the type in the list is the correct one
+	 * @param caster    A function that casts a object to the correct type
+	 * @param <T>       The type of the list
+	 * @return A {@link Optional} containing a list of the specified type or if not present or the type doesn't match a empty Optional
+	 */
 	protected <T> Optional<List<T>> getList(String path, Function<Object, Boolean> checkType, Function<Object, T> caster) {
 		path = checkPathAndPrependPrefix(path);
-		Object value = MapHelper.get(root, path);
+		Object value = MapHelper.get(map, path);
 		if (value instanceof List<?>) {
 			List<?> list = (List<?>) value;
 			if (list.isEmpty()) {
@@ -146,7 +141,7 @@ public abstract class MapBasedStorageContainer extends AbstractStorageContainer 
 	@Override
 	public Set<String> getKeys(String path) {
 		path = checkPathAndPrependPrefix(path);
-		Object value = MapHelper.get(root, path);
+		Object value = MapHelper.get(map, path);
 		if (value instanceof Map<?, ?>) {
 			return ((Map<?, ?>) value).keySet().stream().map(Objects::toString).collect(Collectors.toSet());
 		}
@@ -156,10 +151,15 @@ public abstract class MapBasedStorageContainer extends AbstractStorageContainer 
 	@Override
 	public boolean contains(String path) {
 		path = checkPathAndPrependPrefix(path);
-		return MapHelper.get(root, path) != null;
+		return MapHelper.get(map, path) != null;
 	}
 
-	public Map<String, Object> getRoot() {
-		return root;
+	/**
+	 * The returned map is mutable and every change to it will reflect in this instance
+	 *
+	 * @return The backing map of this storage container
+	 */
+	public Map<String, Object> getMap() {
+		return map;
 	}
 }
