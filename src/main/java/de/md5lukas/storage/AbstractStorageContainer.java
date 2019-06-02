@@ -41,6 +41,12 @@ public abstract class AbstractStorageContainer implements StorageContainer {
 		return setString(path, Objects.toString(value), override);
 	}
 
+	@Override
+	public void setDefault(String path, Object value) {
+		if (!contains(path))
+			set(path, value);
+	}
+
 	protected boolean setString(String path, String value, boolean override) {
 		return false;
 	}
@@ -81,6 +87,7 @@ public abstract class AbstractStorageContainer implements StorageContainer {
 		return false;
 	}
 
+	@SuppressWarnings("WeakerAccess") // in case someone wants to add his own custom implementation
 	protected final <T> List<T> convertList(List<?> input, Function<Object, T> converter) {
 		List<T> output = new ArrayList<>(input.size());
 		for (Object o : input)

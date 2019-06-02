@@ -71,6 +71,17 @@ public interface StorageContainer extends FileStorage {
 	 * @return <code>true</code>if the value has been set successfully
 	 */
 	boolean set(String path, Object value, boolean override);
+
+	/**
+	 * This method checks if a value is present under the specified path. If it found nothing it will set the given
+	 * value into the given path.
+	 *
+	 * @param path  The path where the value should be stored
+	 * @param value The value
+	 * @see #contains(String) For checking if a value is present
+	 * @see #set(String, Object) For setting a value and possible types for the object
+	 */
+	void setDefault(String path, Object value);
 	//</editor-fold>
 
 	//<editor-fold desc="Get values">

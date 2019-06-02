@@ -3,6 +3,7 @@ package de.md5lukas.storage.test;
 import de.md5lukas.storage.JsonStorage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JsonStorageTest {
+class JsonStorageTest {
 
 	private JsonStorage storage;
 	private List<File> createdFiles;

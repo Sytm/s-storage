@@ -5,10 +5,11 @@ import de.md5lukas.nbt.tags.*;
 import de.md5lukas.storage.util.CompoundHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CompoundHelperTest {
+class CompoundHelperTest {
 
 	private CompoundTag tag;
 
