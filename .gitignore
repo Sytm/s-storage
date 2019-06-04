@@ -14,4 +14,5 @@ buildNumber.properties
 .idea/
 *.iml
 src/test/java/de/md5lukas/storage/test/Test.java
+src/test/resources/
 /test.*
