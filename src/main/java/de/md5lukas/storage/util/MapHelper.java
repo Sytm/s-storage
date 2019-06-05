@@ -1,6 +1,8 @@
 package de.md5lukas.storage.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,7 +60,7 @@ public class MapHelper {
 				Object o = parent.get(name);
 				if (o != null && value == null && !override)
 					return false;
-				if (o == null || value == null || override) {
+				if (o == null || value == null || value.getClass().equals(o.getClass()) || override) {
 					parent.put(name, value);
 					return true;
 				} else {
@@ -84,5 +86,51 @@ public class MapHelper {
 			}
 		}
 		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <K, V> Map<K, V> cloneMap(Map<K, V> map) {
+		Map<Object, Object> newMap = new HashMap<>(map.size());
+		map.forEach((k, v) -> {
+			if (v instanceof Map<?, ?>)
+				newMap.put(k, cloneMap((Map<Object, Object>) v));
+			else if (v instanceof List<?>)
+				newMap.put(k, cloneList((List<Object>) v));
+			else
+				newMap.put(k, v);
+		});
+		return (Map<K, V>) newMap;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static List<Object> cloneList(List<Object> list) {
+		List<Object> newList = new ArrayList<>(list.size());
+		list.forEach(o -> {
+			if (o instanceof Map<?, ?>)
+				newList.add(cloneMap((Map<Object, Object>) o));
+			else if (o instanceof List<?>)
+				newList.add(cloneList((List<Object>) o));
+			else
+				newList.add(o);
+		});
+		return newList;
+	}
+
+	public static Map<String, Object> treeMapToFlatMap(Map<String, Object> map) {
+		Map<String, Object> flatMap = new HashMap<>();
+		treeMapToFlatMap("", flatMap, map);
+		return flatMap;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static void treeMapToFlatMap(String currentPath, Map<String, Object> output, Map<String, Object> currentMap) {
+		currentMap.forEach((s, o) -> {
+			String path = (currentPath.isEmpty() ? "" : currentPath + ".") + s;
+			if (o instanceof Map) {
+				treeMapToFlatMap(path, output, (Map<String, Object>) o);
+			} else {
+				output.put(path, o);
+			}
+		});
 	}
 }

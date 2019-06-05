@@ -30,6 +30,14 @@ public class BinaryStorage extends AbstractStorageContainer {
 
 	//<editor-fold desc="Setting values">
 	@Override
+	public boolean set(String path, Object value, boolean override) {
+		if (value instanceof Tag) {
+			return CompoundHelper.setTag(root, (Tag) value, checkPathAndPrependPrefix(path), override);
+		}
+		return super.set(path, value, override);
+	}
+
+	@Override
 	protected boolean setBoolean(String path, boolean value, boolean override) {
 		return CompoundHelper.setTag(root, new ByteTag(null, (byte) (value ? 1 : 0)), path, override);
 	}
@@ -103,6 +111,8 @@ public class BinaryStorage extends AbstractStorageContainer {
 	//</editor-fold>
 
 	//<editor-fold desc="Getting values">
+
+
 	@Override
 	public Optional<String> getString(String path) {
 		return get(path, t -> t instanceof StringTag, t -> ((StringTag) t).data);
