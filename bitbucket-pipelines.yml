@@ -12,6 +12,6 @@ pipelines:
           - maven
         script: # Modify the commands below to build your repository.
           - mkdir libs
-          - curl https://bitbucket.org/Md5Lukas/nbt/downloads/nbt-1.0.0.jar --output libs/nbt.jar # Download nbt-lib
+          - wget https://bitbucket.org/Md5Lukas/nbt/downloads/nbt-1.0.0.jar -O libs/nbt.jar # Download nbt-lib
           - mvn -B install:install-file -Dfile=libs/nbt.jar -DgroupId=de.md5lukas -DartifactId=nbt -Dversion=1.0.0 -Dpackaging=jar # Install nbt lib into local repository
           - mvn -B verify # -B batch mode makes Maven less verbose
