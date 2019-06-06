@@ -1,0 +1,1 @@
+Please visit the [Wiki](https://bitbucket.org/Md5Lukas/standalonestorage/wiki/Home) for more information
