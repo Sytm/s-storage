@@ -15,3 +15,5 @@ pipelines:
           - wget https://bitbucket.org/Md5Lukas/nbt/downloads/nbt-1.0.0.jar -O libs/nbt.jar # Download nbt-lib
           - mvn -B install:install-file -Dfile=libs/nbt.jar -DgroupId=de.md5lukas -DartifactId=nbt -Dversion=1.0.0 -Dpackaging=jar # Install nbt lib into local repository
           - mvn -B verify # -B batch mode makes Maven less verbose
+          - wget https://bitbucket.org/Md5Lukas/bitbucket-uploader/downloads/bitbucket-uploader-1.0.jar -O bu.jar # Download bitbucket uploader
+          - java -jar bu.jar ${BB_AUTH_STRING} ${BITBUCKET_REPO_OWNER} ${BITBUCKET_REPO_SLUG}
