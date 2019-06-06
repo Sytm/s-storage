@@ -11,6 +11,7 @@ pipelines:
         caches:
           - maven
         script: # Modify the commands below to build your repository.
-          - curl "https://bitbucket.org/Md5Lukas/nbt/downloads/nbt-1.0.0.jar" --output "libs/nbt.jar" # Downlaod nbt-lib
+          - mkdir libs
+          - curl https://bitbucket.org/Md5Lukas/nbt/downloads/nbt-1.0.0.jar --output libs/nbt.jar # Downlaod nbt-lib
           - mvn install:install-file -Dfile=libs/nbt.jar # Install nbt lib into local repository (using pom detection)
           - mvn -B verify # -B batch mode makes Maven less verbose
