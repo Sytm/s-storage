@@ -1,13 +1,11 @@
 package de.md5lukas.storage.test;
 
 import de.md5lukas.storage.YamlStorage;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,20 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class YamlStorageTest {
 
 	private YamlStorage storage;
-	private List<File> createdFiles;
 
 	@BeforeEach
 	void init() {
-		createdFiles = new ArrayList<>();
 		storage = new YamlStorage();
 		StorageContainerCreator.fillStorageContainer(storage);
-	}
-
-	@AfterEach
-	void fileCleanUp() {
-		for (File file : createdFiles)
-			if (file.isFile())
-				file.delete();
 	}
 
 	@SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -91,11 +80,14 @@ class YamlStorageTest {
 
 	@Test
 	void saveAndLoadTest() throws IOException {
-		File file = new File("src/test/resources/test.yaml");
-		createdFiles.add(file);
-		String value = storage.toString();
-		storage.save(file);
-		storage.load(file);
-		assertEquals(value, storage.toString());
+		File file = new File("test.yaml");
+		try {
+			String value = storage.toString();
+			storage.save(file);
+			storage.load(file);
+			assertEquals(value, storage.toString());
+		} finally {
+			file.delete();
+		}
 	}
 }

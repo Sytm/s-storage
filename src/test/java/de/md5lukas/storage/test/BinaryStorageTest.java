@@ -1,13 +1,11 @@
 package de.md5lukas.storage.test;
 
 import de.md5lukas.storage.BinaryStorage;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,20 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class BinaryStorageTest {
 
 	private BinaryStorage storage;
-	private List<File> createdFiles;
 
 	@BeforeEach
 	void init() {
-		createdFiles = new ArrayList<>();
 		storage = new BinaryStorage("map");
 		StorageContainerCreator.fillStorageContainer(storage);
-	}
-
-	@AfterEach
-	void fileCleanUp() {
-		for (File file : createdFiles)
-			if (file.isFile())
-				file.delete();
 	}
 
 	@SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -83,22 +72,28 @@ class BinaryStorageTest {
 
 	@Test
 	void saveAndLoadTest() throws IOException {
-		File file = new File("src/test/resources/test.nbt");
-		createdFiles.add(file);
-		String value = storage.toString();
-		storage.save(file);
-		storage.load(file);
-		assertEquals(value, storage.toString());
+		File file = new File("test.nbt");
+		try {
+			String value = storage.toString();
+			storage.save(file);
+			storage.load(file);
+			assertEquals(value, storage.toString());
+		} finally {
+			file.delete();
+		}
 	}
 
 	@Test
 	void saveAndLoadCompressedTest() throws IOException {
-		File file = new File("src/test/resources/test.nbt");
-		createdFiles.add(file);
-		String value = storage.getRoot().toString();
-		storage.save(file, true);
-		storage.load(file, true);
-		assertEquals(value, storage.getRoot().toString());
+		File file = new File("test-c.nbt");
+		try {
+			String value = storage.getRoot().toString();
+			storage.save(file, true);
+			storage.load(file, true);
+			assertEquals(value, storage.getRoot().toString());
+		} finally {
+			file.delete();
+		}
 	}
 
 	private <T> void compareLists(List<T> expected, List<T> actual) {
