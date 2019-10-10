@@ -16,20 +16,23 @@
 
     <repositories>
         <repository>
-            <id>Sonatype-public</id>
-            <name>SnakeYAML repository</name>
-            <url>http://oss.sonatype.org/content/groups/public/</url>
+            <id>sytm-nexus</id>
+            <url>https://repo.sytm.de/repository/maven-sonatype/</url>
         </repository>
         <repository>
             <id>sytm-nexus</id>
-            <url>http://sytm.de:8081/repository/maven-snapshots/</url>
+            <url>https://repo.sytm.de/repository/maven-hosted/</url>
         </repository>
     </repositories>
 
     <distributionManagement>
+        <repository>
+            <id>sytm-nexus</id>
+            <url>https://repo.sytm.de/repository/maven-releases/</url>
+        </repository>
         <snapshotRepository>
             <id>sytm-nexus</id>
-            <url>http://sytm.de:8081/repository/maven-snapshots/</url>
+            <url>https://repo.sytm.de/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -37,7 +40,7 @@
         <dependency>
             <groupId>de.md5lukas</groupId>
             <artifactId>nbt</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.2.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>
