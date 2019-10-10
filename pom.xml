@@ -16,7 +16,7 @@
 
     <repositories>
         <repository>
-            <id>sytm-nexus</id>
+            <id>sytm-nexus-sonatype</id>
             <url>https://repo.sytm.de/repository/maven-sonatype/</url>
         </repository>
         <repository>
