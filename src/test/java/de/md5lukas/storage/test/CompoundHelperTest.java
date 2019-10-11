@@ -46,20 +46,20 @@ class CompoundHelperTest {
 	@SuppressWarnings("ConstantConditions")
 	@Test
 	void testGet() {
-		assertEquals(1353.234f, ((FloatTag) CompoundHelper.getTag(tag, "float")).data);
-		assertEquals((byte) 99, ((ByteTag) CompoundHelper.getTag(tag, "layer2.byte")).data);
-		assertEquals(3573175231L, ((LongTag) CompoundHelper.getTag(tag, "layer2.layer3.long")).data);
+		assertEquals(1353.234f, ((FloatTag) CompoundHelper.getTag(tag, "float")).value());
+		assertEquals((byte) 99, ((ByteTag) CompoundHelper.getTag(tag, "layer2.byte")).value());
+		assertEquals(3573175231L, ((LongTag) CompoundHelper.getTag(tag, "layer2.layer3.long")).value());
 
 		ListTag listTag = (ListTag) CompoundHelper.getTag(tag, "layer2.layer3.layer4.list");
 		for (int i = 0; i < listTag.size(); ++i) {
 			StringTag stringTag = (StringTag) listTag.get(i);
-			assertEquals("Value " + i, stringTag.data);
+			assertEquals("Value " + i, stringTag.value());
 		}
 
-		assertEquals((short) 12752, ((ShortTag) CompoundHelper.getTag(tag, "layer2.layer3.layer4.layer5.short")).data);
-		assertEquals(32153212, ((IntTag) CompoundHelper.getTag(tag, "layer2.layer3.layer4.layer5.layer6.int")).data);
-		assertEquals(129385.237851, ((DoubleTag) CompoundHelper.getTag(tag, "layer2.layer3.layer4.layer5.layer6.layer7.double")).data);
-		assertArrayEquals(new int[]{351, 573453, 934346}, ((IntArrayTag) CompoundHelper.getTag(tag, "layer2.layer3.layer4.layer5.layer6.layer7.layer8.intArray")).data);
+		assertEquals((short) 12752, ((ShortTag) CompoundHelper.getTag(tag, "layer2.layer3.layer4.layer5.short")).value());
+		assertEquals(32153212, ((IntTag) CompoundHelper.getTag(tag, "layer2.layer3.layer4.layer5.layer6.int")).value());
+		assertEquals(129385.237851, ((DoubleTag) CompoundHelper.getTag(tag, "layer2.layer3.layer4.layer5.layer6.layer7.double")).value());
+		assertArrayEquals(new int[] { 351, 573453, 934346 }, ((IntArrayTag) CompoundHelper.getTag(tag, "layer2.layer3.layer4.layer5.layer6.layer7.layer8.intArray")).value());
 
 		assertNull(CompoundHelper.getTag(tag, "layer2.layer3.layer4.layer5.layer6.layer7.layer8.layer9"));
 		assertNull(CompoundHelper.getTag(tag, "layer2.layer3.layer4.layer5.layer6.layer7.layer8.layer9.layer.layer.layer.layer"));

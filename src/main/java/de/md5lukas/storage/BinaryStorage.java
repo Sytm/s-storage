@@ -80,9 +80,9 @@ public class BinaryStorage extends AbstractStorageContainer {
 	@Override
 	protected boolean setList(String path, List<?> value, boolean override) {
 		if (value.isEmpty()) {
-			return CompoundHelper.setTag(root, new ListTag(null), path, override);
+			return CompoundHelper.setTag(root, new ListTag((String) null), path, override);
 		} else {
-			ListTag tag = new ListTag(null);
+			ListTag tag = new ListTag((String) null);
 			Object first = value.get(0);
 			if (first instanceof Byte) {
 				tag.setList(convertList(value, o -> new ByteTag(null, (byte) o)));
@@ -115,42 +115,42 @@ public class BinaryStorage extends AbstractStorageContainer {
 
 	@Override
 	public Optional<String> getString(String path) {
-		return get(path, t -> t instanceof StringTag, t -> ((StringTag) t).data);
+		return get(path, t -> t instanceof StringTag, t -> ((StringTag) t).value());
 	}
 
 	@Override
 	public Optional<Boolean> getBoolean(String path) {
-		return get(path, t -> t instanceof ByteTag, t -> ((ByteTag) t).data != 0);
+		return get(path, t -> t instanceof ByteTag, t -> ((ByteTag) t).value() != 0);
 	}
 
 	@Override
 	public Optional<Byte> getByte(String path) {
-		return get(path, t -> t instanceof ByteTag, t -> ((ByteTag) t).data);
+		return get(path, t -> t instanceof ByteTag, t -> ((ByteTag) t).value());
 	}
 
 	@Override
 	public Optional<Short> getShort(String path) {
-		return get(path, t -> t instanceof ShortTag, t -> ((ShortTag) t).data);
+		return get(path, t -> t instanceof ShortTag, t -> ((ShortTag) t).value());
 	}
 
 	@Override
 	public Optional<Integer> getInt(String path) {
-		return get(path, t -> t instanceof IntTag, t -> ((IntTag) t).data);
+		return get(path, t -> t instanceof IntTag, t -> ((IntTag) t).value());
 	}
 
 	@Override
 	public Optional<Long> getLong(String path) {
-		return get(path, t -> t instanceof LongTag, t -> ((LongTag) t).data);
+		return get(path, t -> t instanceof LongTag, t -> ((LongTag) t).value());
 	}
 
 	@Override
 	public Optional<Float> getFloat(String path) {
-		return get(path, t -> t instanceof FloatTag, t -> ((FloatTag) t).data);
+		return get(path, t -> t instanceof FloatTag, t -> ((FloatTag) t).value());
 	}
 
 	@Override
 	public Optional<Double> getDouble(String path) {
-		return get(path, t -> t instanceof DoubleTag, t -> ((DoubleTag) t).data);
+		return get(path, t -> t instanceof DoubleTag, t -> ((DoubleTag) t).value());
 	}
 
 	private <T> Optional<T> get(String path, Function<Tag, Boolean> checkType, Function<Tag, T> caster) {
@@ -165,37 +165,37 @@ public class BinaryStorage extends AbstractStorageContainer {
 	//<editor-fold desc="Getting lists">
 	@Override
 	public Optional<List<Byte>> getByteList(String path) {
-		return getList(path, t -> t instanceof ByteTag, t -> ((ByteTag) t).data);
+		return getList(path, t -> t instanceof ByteTag, t -> ((ByteTag) t).value());
 	}
 
 	@Override
 	public Optional<List<Short>> getShortList(String path) {
-		return getList(path, t -> t instanceof ShortTag, t -> ((ShortTag) t).data);
+		return getList(path, t -> t instanceof ShortTag, t -> ((ShortTag) t).value());
 	}
 
 	@Override
 	public Optional<List<Integer>> getIntList(String path) {
-		return getList(path, t -> t instanceof IntTag, t -> ((IntTag) t).data);
+		return getList(path, t -> t instanceof IntTag, t -> ((IntTag) t).value());
 	}
 
 	@Override
 	public Optional<List<Long>> getLongList(String path) {
-		return getList(path, t -> t instanceof LongTag, t -> ((LongTag) t).data);
+		return getList(path, t -> t instanceof LongTag, t -> ((LongTag) t).value());
 	}
 
 	@Override
 	public Optional<List<Float>> getFloatList(String path) {
-		return getList(path, t -> t instanceof FloatTag, t -> ((FloatTag) t).data);
+		return getList(path, t -> t instanceof FloatTag, t -> ((FloatTag) t).value());
 	}
 
 	@Override
 	public Optional<List<Double>> getDoubleList(String path) {
-		return getList(path, t -> t instanceof DoubleTag, t -> ((DoubleTag) t).data);
+		return getList(path, t -> t instanceof DoubleTag, t -> ((DoubleTag) t).value());
 	}
 
 	@Override
 	public Optional<List<String>> getStringList(String path) {
-		return getList(path, t -> t instanceof StringTag, t -> ((StringTag) t).data);
+		return getList(path, t -> t instanceof StringTag, t -> ((StringTag) t).value());
 	}
 
 	private <T> Optional<List<T>> getList(String path, Function<Tag, Boolean> checkType, Function<Tag, T> caster) {
